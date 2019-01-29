@@ -396,8 +396,13 @@
 		};
 
 		cont_splash_mem: splash_region@9d400000 {
-			reg = <0x0 0x9d400000 0x0 0x02400000>;
+			reg = <0x0 0x9d400000 0x0 0x23ff000>;
 			label = "cont_splash_mem";
+		};
+
+		dfps_data_mem: dfps_data_mem@0x9f7ff000 {
+		       reg = <0 0x9f7ff000 0 0x00001000>;
+		       label = "dfps_data_mem";
 		};
 	};
 
@@ -1246,18 +1251,10 @@
 		compatible = "qcom,clk-cpu-osm";
 		reg = <0x179c0000 0x4000>, <0x17916000 0x1000>,
 		      <0x17816000 0x1000>, <0x179d1000 0x1000>,
-		      <0x00784130 0x8>, <0x00784130 0x8>,
-		      <0x17914800 0x800>;
+		      <0x00784130 0x8>, <0x00784130 0x8>;
 		reg-names = "osm", "pwrcl_pll", "perfcl_pll",
 			    "apcs_common", "pwrcl_efuse",
-			    "perfcl_efuse", "pwrcl_acd";
-
-		qcom,acdtd-val = <0x0000a111 0x0000a111>;
-		qcom,acdcr-val = <0x002c5ffd 0x002c5ffd>;
-		qcom,acdsscr-val = <0x00000901 0x00000901>;
-		qcom,acdextint0-val = <0x2cf9ae8 0x2cf9ae8>;
-		qcom,acdextint1-val = <0x2cf9afe 0x2cf9afe>;
-		qcom,acdautoxfer-val = <0x00000015 0x00000015>;
+			    "perfcl_efuse";
 
 		vdd-pwrcl-supply = <&apc0_pwrcl_vreg>;
 		vdd-perfcl-supply = <&apc1_perfcl_vreg>;
@@ -1339,7 +1336,6 @@
 
 		qcom,up-timer = <1000 1000>;
 		qcom,down-timer = <1000 1000>;
-		qcom,pc-override-index = <0 0>;
 		qcom,set-ret-inactive;
 		qcom,enable-llm-freq-vote;
 		qcom,llm-freq-up-timer = <327675 327675>;
@@ -1571,11 +1567,12 @@
 		};
 	};
 
-	qcom,rmtfs_sharedmem@85e00000 {
+	qcom,rmtfs_sharedmem@0 {
 		compatible = "qcom,sharedmem-uio";
-		reg = <0x85e00000 0x200000>;
+		reg = <0x0 0x200000>;
 		reg-names = "rmtfs";
 		qcom,client-id = <0x00000001>;
+		qcom,guard-memory;
 	};
 
 	qcom,rmnet-ipa {
@@ -1996,6 +1993,7 @@
 	qcom,lpass@15700000 {
 		compatible = "qcom,pil-tz-generic";
 		reg = <0x15700000 0x00100>;
+		reg-names = "base_reg";
 		interrupts = <0 162 1>;
 
 		vdd_cx-supply = <&pm660l_l9_level>;
@@ -2028,6 +2026,7 @@
 	qcom,turing@1a300000 {
 		compatible = "qcom,pil-tz-generic";
 		reg = <0x1a300000 0x00100>;
+		reg-names = "base_reg";
 		interrupts = <0 518 1>;
 
 		vdd_cx-supply = <&pm660l_s3_level>;
@@ -2099,6 +2098,7 @@
 		qcom,qdsp6v62-1-5;
 		memory-region = <&modem_fw_mem>;
 		qcom,mem-protect-id = <0xF>;
+		qcom,complete-ramdump;
 		qcom,cx-ipeak-vote;
 
 		/* GPIO inputs from mss */
